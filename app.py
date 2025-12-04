@@ -14,7 +14,16 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # Se importan los controladores
-from controladores import usuario_controller, contactos_controller
+from controladores.usuario_controller import init_usuario_controller
+from controladores.contactos_controller import init_contactos_controller
+
+init_usuario_controller(app)
+init_contactos_controller(app)
+
+# Ruta raíz obligatoria
+@app.route('/')
+def index():
+    return redirect('/login')
 
 # Se ejecuta la app solo si este archivo es el principal
 if __name__ == "__main__":
