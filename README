@@ -1,0 +1,97 @@
+Agenda de Contactos  Flask (MVC)
+
+Este proyecto implementa una “agenda de contactos personal” 
+con autenticación de usuarios, desarrollada en “Python” 
+usando el framework “Flask”, siguiendo la arquitectura 
+“Modelo-Vista-Controlador (MVC)” y una base de datos “MySQL” 
+gestionada mediante “XAMPP”.
+
+
+Funcionalidades
+
+Autenticación
+- Registro de usuario con correo único y contraseña (mínimo 8 caracteres).
+- Inicio de sesión seguro con hashing de contraseñas (`werkzeug.security`).
+- Cierre de sesión (`/salir`).
+
+Gestión de Contactos (CRUD)
+- “Crear”: Agregar contactos con nombre obligatorio.
+- “Leer”: Listar solo los contactos del usuario autenticado.
+- “Editar”: Modificar datos de un contacto.
+- “Eliminar”: Borrar contactos con confirmación.
+
+> *Restricción de seguridad*: Cada usuario solo puede ver y gestionar sus propios contactos.
+
+
+Tecnologías Utilizadas
+
+COMPONENTE    |	TECNOLOGIA
+Lenguaje	  |  Python 3.12+
+Framework	  |  Flask
+Base de datos |  MySQL (XAMPP)
+Conector	  |  mysql-connector-python
+Sesiones	  |  Flask-Session
+Plantillas	  |  Jinja2 + HTML5 + Bootstrap 5
+Entorno	      |  VSCode
+
+
+
+Estructura del Proyecto
+agenda/
+│
+├── app.py
+├── config.py
+│
+├── modelos/
+│   ├── __init__.py
+│   ├── usuario_model.py
+│   └── contactos_model.py
+│
+├── controladores/
+│   ├── __init__.py
+│   ├── usuario_controller.py
+│   └── contactos_controller.py
+│
+├── templates/
+│   ├── base.html
+│   ├── login.html
+│   ├── registro.html
+│   ├── contactos.html
+│   └── formulario_contacto.html
+│
+├── static/
+│   └── estilos.css
+│
+├── requerimientos.txt
+
+Instalación y Uso
+
+Requisitos previos
+- Tener instalado **XAMPP** (con Apache y MySQL iniciados).
+- Tener **Python 3.12 o superior** y **VSCode**.
+
+Pasos
+
+1. *Crear la base de datos* en phpMyAdmin (`http://localhost/phpmyadmin`):
+    ```sql
+    CREATE DATABASE agenda_db;
+    USE agenda_db;
+
+    CREATE TABLE usuarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(100) NOT NULL,
+        correo VARCHAR(120) UNIQUE,
+        contrasena_hash VARCHAR(200),
+        fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE contactos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario_id INT,
+        nombre VARCHAR(120) NOT NULL,
+        correo VARCHAR(120),
+        telefono VARCHAR(30),
+        detalle TEXT,
+        fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    );
